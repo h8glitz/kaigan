@@ -13,6 +13,11 @@
   100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .particle {
   position: absolute;
   width: 1px;
