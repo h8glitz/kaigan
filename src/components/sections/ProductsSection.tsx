@@ -6,19 +6,36 @@ const ProductsSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [visibleProducts, setVisibleProducts] = useState<typeof products>([]);
   const categories = Array.from(new Set(products.map(p => p.category)));
+  const [showEncryption, setShowEncryption] = useState(false);
 
   useEffect(() => {
     const filtered = selectedCategory
       ? products.filter(p => p.category === selectedCategory)
       : products;
-    setVisibleProducts(filtered);
+    setVisibleProducts([]);
+    setTimeout(() => {
+      setVisibleProducts(filtered);
+    }, 300);
   }, [selectedCategory]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowEncryption(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section className="min-h-screen bg-black pt-32 pb-16">
       <div className="container mx-auto px-8">
         <div className="mb-24 relative">
-          <h1 className="text-4xl md:text-5xl tracking-[0.5em] text-center font-light mb-8">ARTIFACTS</h1>
+          <div className="relative">
+            <h1 className="text-4xl md:text-5xl tracking-[0.5em] text-center font-light mb-8">ARTIFACTS</h1>
+            {showEncryption && (
+              <div className="absolute -inset-8 border border-white/5 animate-[fadeIn_1s_ease-out_forwards]" />
+            )}
+          </div>
+          
           <p className="text-center text-white/50 tracking-[0.3em] text-sm mb-16">ENCRYPTED COLLECTION 2025</p>
           
           <div className="flex flex-wrap justify-center gap-8 mb-16">
@@ -47,8 +64,12 @@ const ProductsSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
-          {visibleProducts.map(product => (
-            <div key={product.id} className="opacity-0 animate-[fadeIn_0.8s_ease-out_forwards]">
+          {visibleProducts.map((product, index) => (
+            <div 
+              key={product.id} 
+              className="opacity-0 animate-[fadeIn_0.8s_ease-out_forwards]"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               <ProductCard product={product} />
             </div>
           ))}
